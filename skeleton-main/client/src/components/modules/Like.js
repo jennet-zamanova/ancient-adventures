@@ -6,7 +6,7 @@ import "../../utilities.css";
 import { socket } from "../../client-socket.js";
 import { get, post } from "../../utilities";
 
-const GOOGLE_CLIENT_ID = "858506206421-1pv0pb0cqnuloni5btod4ah542u5vrp2.apps.googleusercontent.com";
+const GOOGLE_CLIENT_ID = "858506206421-kcggq02bpfo0ntheakfd0fnd6k5pm19m.apps.googleusercontent.com";
 
 const Like = (props) => {
   const [isLiked, setLiked] = useState(false);
@@ -27,7 +27,7 @@ const Like = (props) => {
       </GoogleOAuthProvider>;
     }
     setLiked(!isLiked);
-    post("/api/place/user", { userId: props.userId, isLiked: isLiked });
+    post("/api/place/user", { userId: props.userId, isLiked: isLiked, country: props.country });
   };
   return (
     <button onClick={handleClick}>

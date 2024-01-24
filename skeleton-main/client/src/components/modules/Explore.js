@@ -8,13 +8,15 @@ import { socket } from "../../client-socket.js";
 import { get, post } from "../../utilities";
 
 const Explore = (props) => {
-  const [countries, setCountries] = useState([]);
+  const [countries, setCountries] = useState(["Turkmenistan"]);
   const [places, setPlaces] = useState([]);
+  const [selectedCountry, setCountry] = useState("");
 
   const getCountries = () => {
     // get countries from db
     get("/api/countries/").then((countriesObj) => {
       setCountries(countriesObj);
+      return countriesObj;
     });
   };
 
@@ -43,13 +45,11 @@ const Explore = (props) => {
 
     return randomNumbers;
   };
-  const selectPlacesRandomly = (countries) => {
-    if (countries == []) {
-      countries = getCountries();
-    }
-    console.log("the countries", countries);
-    const selectedCountry = countries[getRandomInt(0, countries.length)];
-    const allPlaces = getPlacesFromCountry(selectedCountry);
+  const selectPlacesRandomly = async (countries) => {
+    console.log("countries: ", countries);
+    setCountries(await getCountries());
+    setCountry(countries[getRandomInt(0, countries.length)]);
+    const allPlaces = await getPlacesFromCountry(selectedCountry);
     const randomIdx = getRandomNumbersInRange(
       getRandomInt(2, allPlaces.length - 1),
       0,
@@ -59,12 +59,19 @@ const Explore = (props) => {
   };
 
   useEffect(getCountries, []);
-  useEffect(selectPlacesRandomly(countries), [countries]);
+  useEffect(() => {
+    selectPlacesRandomly(countries);
+  }, []);
 
   return (
     <>
       This is Explore
-      <Places selectedPlaces={places} userId={props.userId} handleLogin={props.handleLogin} />
+      <Places
+        selectedPlaces={places}
+        userId={props.userId}
+        handleLogin={props.handleLogin}
+        country={selectedCountry}
+      />
     </>
   );
 };

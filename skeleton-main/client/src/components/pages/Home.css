@@ -1,0 +1,11 @@
+.Home-heading {
+  color: var(--primary);
+  font-size: xx-large;
+}
+
+.Home-body {
+  background-image: url("/client/images/h-place-2.png");
+  width: 100%;
+  height: 100%;
+  color: brown;
+}

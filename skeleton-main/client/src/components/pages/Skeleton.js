@@ -1,24 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin, googleLogout } from "@react-oauth/google";
+import DropDownMenu from "../modules/DropDownMenu";
 
 import "../../utilities.css";
 import "./Skeleton.css";
 
 //TODO: REPLACE WITH YOUR OWN CLIENT_ID
-const GOOGLE_CLIENT_ID = "858506206421-1pv0pb0cqnuloni5btod4ah542u5vrp2.apps.googleusercontent.com";
+const GOOGLE_CLIENT_ID = "858506206421-kcggq02bpfo0ntheakfd0fnd6k5pm19m.apps.googleusercontent.com";
 
 const Skeleton = ({ userId, handleLogin, handleLogout }) => {
-  const handleClick = () => {};
+  const [isDropdownVisible, setDropdownVisible] = useState(false);
+  const countries = ["Turkmenistan", "Uzbekistan", "Kazakhstan", "Tajikistan", "Kyrgyzstan"];
+
+  const handleMouseEnter = () => {
+    setDropdownVisible(true);
+  };
+
+  const handleMouseLeave = () => {
+    setDropdownVisible(false);
+  };
   return (
-    <>
-      <>AncientAdventures</>
-      <>
-        <button onClick={handleClick}>Central Asia</button>
-        <Link path="/cuisine/">Cuisine</Link>
-        <Link path="/culture/">Culture</Link>
-      </>
-      <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+    <div className="NavBar-container u-flex u-textCenter">
+      <Link path="/" className="u-bold NavBar-title">
+        AncientAdventures
+      </Link>
+      <div className="u-flex u-flex-alignCenter NavBar-linkContainer">
+        <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className="u-flex">
+          <Link className="NavBar-link">Central Asia</Link>
+          {isDropdownVisible && <DropDownMenu countries={countries} />}
+        </div>
+        <Link path="/cuisine/" className="NavBar-link">
+          Cuisine
+        </Link>
+        <Link path="/culture/" className="NavBar-link">
+          Culture
+        </Link>
+      </div>
+      <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID} className="NavBar-login">
         {userId ? (
           <button
             onClick={() => {
@@ -32,7 +51,7 @@ const Skeleton = ({ userId, handleLogin, handleLogout }) => {
           <GoogleLogin onSuccess={handleLogin} onError={(err) => console.log(err)} />
         )}
       </GoogleOAuthProvider>
-    </>
+    </div>
   );
 };
 

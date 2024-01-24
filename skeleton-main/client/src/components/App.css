@@ -1,0 +1,16 @@
+:root {
+  --primary: #800020;
+  --primary-light: #cdbca2;
+  --primary-dark: #b9a68f;
+  --primary--dim: rgba(210, 180, 140, 0.55);
+  --link-color: #556b2f;
+  --darkgrey: #d9d9d9;
+  --medgrey: #d4d4d4;
+  --grey: #f4f4f4;
+  --white: #fff;
+
+  --xs: 4px;
+  --s: 8px;
+  --m: 16px;
+  --l: 24px;
+}

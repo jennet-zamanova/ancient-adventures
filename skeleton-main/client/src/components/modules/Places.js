@@ -45,6 +45,7 @@ const Places = (props) => {
             userId={props.userId}
             placeIdx={props.selectedPlaces[placeNum]}
             handleLogin={props.handleLogin}
+            country={props.country}
           />
           <>{placeDescription}</>
           {placeNum > props.selectedPlaces ? <></> : <button onClick={handleClickRight} />}

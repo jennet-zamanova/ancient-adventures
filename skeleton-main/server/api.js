@@ -72,19 +72,32 @@ router.get("/place/user", (req, res) => {
 router.post("/place/user", (req, res) => {
   User.findById(req.user.userId).then((user) => {
     const likedPlaces = user.likedPlaces;
+    const likedCountries = user.likedCountries;
     if (likedPlaces.includes(req.user.placeIdx)) {
       likedPlaces = likedPlaces.filter((item) => item !== req.user.placeIdx);
     } else {
       likedPlaces.push(req.user.placeIdx);
+    }
+    if (likedCountries.includes(req.user.country)) {
+      likedCountries = likedCountries.filter((item) => item !== req.user.country);
+    } else {
+      likedCountries.push(req.user.country);
     }
     User.updateOne(
       { _id: req.user.userId }, // specify the condition
       {
         $set: {
           likedPlaces: likedPlaces, // specify the field and its new value
+          likedCountries: likedCountries,
         },
       }
     );
+  });
+});
+
+router.get("/wishlist", (req, res) => {
+  User.findById(req.user.userId).then((user) => {
+    res.send({ likedPlaces: user.likedPlaces, likedCountries: user.likedCountries });
   });
 });
 // anything else falls to this "not found" case

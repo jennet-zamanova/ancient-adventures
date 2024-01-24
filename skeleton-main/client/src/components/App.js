@@ -5,6 +5,7 @@ import jwt_decode from "jwt-decode";
 
 import NotFound from "./pages/NotFound.js";
 import Home from "./pages/Home.js";
+import WishList from "./pages/Wishlist.js";
 import Skeleton from "./pages/Skeleton.js";
 import Explore from "./modules/Explore.js";
 
@@ -61,6 +62,7 @@ const App = () => {
           }
         /> */}
         <Route path="/explore/" element={<Explore userId={userId} handleLogin={handleLogin} />} />
+        <Route path="/wishlist/" element={<WishList userId={userId} />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
