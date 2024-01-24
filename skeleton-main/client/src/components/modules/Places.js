@@ -6,9 +6,13 @@ import "../../utilities.css";
 import { socket } from "../../client-socket.js";
 
 import { get, post } from "../../utilities";
+import downClick from "/client/images/down-click.svg";
+import rightClick from "/client/images/right-click.svg";
+
+import "./Places.css";
 
 const Places = (props) => {
-  const [pageNum, setPageNum] = useState(1); // can be 0 or 1
+  const [pageNum, setPageNum] = useState(0); // can be 0 or 1
 
   const [placeNum, setPlaceNum] = useState(0); // can be 0-props.places.length
   const [placeImg, setPlaceImg] = useState("");
@@ -20,25 +24,34 @@ const Places = (props) => {
 
   const handleClickRight = () => {
     setPageNum(0);
-    setPlaceNum(placeNum + 1);
+    setPlaceNum((placeNum + 1) % 2);
+    getPlaceInformation(placeNum);
   };
 
   const getPlaceInformation = (placeNumber) => {
     // get Image and Description from db
     get("/api/place/", { placeIdx: props.selectedPlaces[placeNumber] }).then((placeInfo) => {
-      setPlaceImg(placeInfo.img);
+      setPlaceImg("data:image/jpg;base64," + placeInfo.img);
       setPlaceDescription(placeInfo.description);
+      console.log("this is number", placeNumber);
+      console.log(placeImg);
     });
   };
 
   useEffect(() => {
-    getPlaceInformation(placeNum);
-  }, [placeNum]);
+    getPlaceInformation(0);
+  }, []);
 
   return (
     <div style={{ backgroundImage: { placeImg } }}>
       {pageNum == 0 ? (
-        <button onClick={handleClickDown} />
+        <button
+          onClick={handleClickDown}
+          className="Places-downclick"
+          style={{ backgroundImage: { downClick } }}
+        >
+          V
+        </button>
       ) : (
         <>
           <Like
@@ -48,7 +61,17 @@ const Places = (props) => {
             country={props.country}
           />
           <>{placeDescription}</>
-          {placeNum > props.selectedPlaces ? <></> : <button onClick={handleClickRight} />}
+          {placeNum > props.selectedPlaces ? (
+            <></>
+          ) : (
+            <button
+              onClick={handleClickRight}
+              className="Places-rightclick"
+              style={{ backgroundImage: { rightClick } }}
+            >
+              V
+            </button>
+          )}
         </>
       )}
     </div>

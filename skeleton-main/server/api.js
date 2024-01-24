@@ -52,14 +52,17 @@ router.get("/countries", (req, res) => {
 });
 
 router.get("/places", (req, res) => {
+  console.log("country:", req.query.country);
   Country.find({ country: req.query.country }).then((placesObj) => {
-    res.send(placesObj);
+    console.log(placesObj);
+    res.send(placesObj[0].places);
   });
 });
 
 router.get("/place", (req, res) => {
   Place.find({ placeIdx: req.query.placeIdx }).then((placeObj) => {
     res.send(placeObj);
+    console.log(placeObj);
   });
 });
 

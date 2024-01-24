@@ -1,0 +1,16 @@
+.Places-downclick {
+  position: absolute;
+  bottom: 0;
+  right: 50%;
+  width: var(--xl);
+  height: var(--xl);
+}
+
+.Places-rightclick {
+  position: absolute;
+  bottom: 50%;
+  right: 0;
+  width: var(--xl);
+  height: var(--xl);
+  rotate: -90deg;
+}

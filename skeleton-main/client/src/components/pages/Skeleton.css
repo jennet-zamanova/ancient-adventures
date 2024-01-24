@@ -5,8 +5,10 @@
 }
 
 .NavBar-title {
+  text-decoration: none;
   color: var(--primary);
-  font-size: 20px;
+  font-size: var(--l);
+  padding: 4px;
 }
 
 .NavBar-linkContainer {
@@ -15,9 +17,11 @@
 
 .NavBar-link,
 .NavBar-link:visited {
+  font-size: var(--m);
   color: black;
   opacity: 0.6;
   text-decoration: none;
+  padding: 0px var(--m);
 }
 
 .NavBar-link:hover {

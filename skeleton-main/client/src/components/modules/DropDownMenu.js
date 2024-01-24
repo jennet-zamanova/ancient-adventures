@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-
+import "../../utilities.css";
 const DropDownMenu = (props) => {
   return (
-    <div>
+    <div className="u-flexColumn">
       <ul>
         {props.countries.map((item) => {
           <li>

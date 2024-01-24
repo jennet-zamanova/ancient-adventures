@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import { GoogleOAuthProvider, GoogleLogin, googleLogout } from "@react-oauth/google";
 
 import "../../utilities.css";
-
+import "./Like.css";
 import { socket } from "../../client-socket.js";
 import { get, post } from "../../utilities";
+
+import greyHeart from "/client/images/grey-heart.svg";
+import redHeart from "/client/images/red-heart.svg";
 
 const GOOGLE_CLIENT_ID = "858506206421-kcggq02bpfo0ntheakfd0fnd6k5pm19m.apps.googleusercontent.com";
 
@@ -30,12 +33,12 @@ const Like = (props) => {
     post("/api/place/user", { userId: props.userId, isLiked: isLiked, country: props.country });
   };
   return (
-    <button onClick={handleClick}>
+    <button onClick={handleClick} className="Like-heartButton">
       {
         isLiked ? (
-          <img href="../../../images/red-heart.svg" /> //red
+          <img src={redHeart} className="Like-heart" /> //red
         ) : (
-          <img href="../../../images/grey-heart.svg" />
+          <img src={greyHeart} className="Like-heart" />
         ) //grey
       }
     </button>

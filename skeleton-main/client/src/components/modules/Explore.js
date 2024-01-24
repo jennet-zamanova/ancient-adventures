@@ -10,20 +10,24 @@ import { get, post } from "../../utilities";
 const Explore = (props) => {
   const [countries, setCountries] = useState(["Turkmenistan"]);
   const [places, setPlaces] = useState([]);
-  const [selectedCountry, setCountry] = useState("");
+  const [selectedCountry, setCountry] = useState("Turkmenistan");
+  let data;
 
   const getCountries = () => {
     // get countries from db
-    get("/api/countries/").then((countriesObj) => {
-      setCountries(countriesObj);
-      return countriesObj;
-    });
+    // get("/api/countries/").then((countriesObj) => {
+    //   setCountries(countriesObj);
+    //   return countriesObj;
+    // }); TODO
+    setCountry("Turkmenistan");
+    // return ["Turkmenistan"];
   };
 
-  const getPlacesFromCountry = (country) => {
+  const getPlacesFromCountry = async (country) => {
     // get places from db
-    get("/api/places/", { country: country }).then((placesObj) => {
+    await get("/api/places/", { country: country }).then((placesObj) => {
       setPlaces(placesObj);
+      data = placesObj;
     });
   };
 
@@ -47,15 +51,14 @@ const Explore = (props) => {
   };
   const selectPlacesRandomly = async (countries) => {
     console.log("countries: ", countries);
-    setCountries(await getCountries());
-    setCountry(countries[getRandomInt(0, countries.length)]);
-    const allPlaces = await getPlacesFromCountry(selectedCountry);
-    const randomIdx = getRandomNumbersInRange(
-      getRandomInt(2, allPlaces.length - 1),
-      0,
-      allPlaces.length
-    );
-    setPlaces(Array.from(randomIdx).map((index) => allPlaces[index]));
+    // setCountries(await getCountries());
+    // setCountry(countries[getRandomInt(0, countries.length)]); TODO
+    console.log("country", selectedCountry);
+    await getPlacesFromCountry(selectedCountry);
+    const randomIdx = getRandomNumbersInRange(getRandomInt(2, data.length - 1), 0, places.length);
+    console.log(randomIdx);
+    setPlaces(Array.from(randomIdx).map((index) => data[index]));
+    console.log(places);
   };
 
   useEffect(getCountries, []);
