@@ -1,0 +1,8 @@
+.Like-heartButton {
+  border: none;
+  background-color: var(--grey);
+}
+.Like-heart {
+  width: var(--xl);
+  height: var(--xl);
+}

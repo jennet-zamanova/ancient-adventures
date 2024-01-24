@@ -16,7 +16,7 @@ const WishList = (props) => {
   const getPlaceInformation = (placeNumber) => {
     // get Image and Description from db
     get("/api/place/", { placeIdx: placeNumber }).then((placeInfo) => {
-      setPlaceImg(placeInfo.img);
+      setPlaceImg("data:image/jpg;base64," + placeInfo.img);
       return placeImg;
     });
   };
@@ -38,7 +38,7 @@ const WishList = (props) => {
 
           {
             likedPlaces.map((place) => {
-              <img href={getPlaceInformation(place)}></img>;
+              <img src={getPlaceInformation(place)}></img>;
             });
           }
         })}
