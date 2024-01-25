@@ -24,26 +24,42 @@ const Places = (props) => {
 
   const handleClickRight = () => {
     setPageNum(0);
-    setPlaceNum((placeNum + 1) % 2);
-    getPlaceInformation(placeNum);
+    setPlaceNum(placeNum + 1);
+    // getPlaceInformation(placeNum);
   };
 
   const getPlaceInformation = (placeNumber) => {
     // get Image and Description from db
+    // console.log("placenum", placeNum);
+    // console.log("placeIdx", props.selectedPlaces[placeNumber]);
     get("/api/place/", { placeIdx: props.selectedPlaces[placeNumber] }).then((placeInfo) => {
-      setPlaceImg("data:image/jpg;base64," + placeInfo.img);
-      setPlaceDescription(placeInfo.description);
+      if (placeInfo[0] != undefined) {
+        // console.log("first info", placeInfo[0]);
+        setPlaceImg("data:image/png;base64," + placeInfo[0].img);
+        setPlaceDescription(placeInfo[0].description);
+      }
       console.log("this is number", placeNumber);
-      console.log(placeImg);
+      // console.log("this is places infor", placeInfo);
     });
   };
 
   useEffect(() => {
-    getPlaceInformation(0);
-  }, []);
+    console.log("all places", props.selectedPlaces);
+  });
+  useEffect(() => {
+    if (props.selectedPlaces != []) {
+      getPlaceInformation(placeNum);
+    }
+  }, [props.selectedPlaces, placeNum]);
+
+  useEffect(() => {
+    console.log("placeImg changed. Component re-rendered.");
+    // }
+  }, [placeImg]);
 
   return (
-    <div style={{ backgroundImage: { placeImg } }}>
+    <div id="place-div-container">
+      <img src={placeImg} id="place-div"></img>
       {pageNum == 0 ? (
         <button
           onClick={handleClickDown}
@@ -53,26 +69,38 @@ const Places = (props) => {
           V
         </button>
       ) : (
-        <>
-          <Like
-            userId={props.userId}
-            placeIdx={props.selectedPlaces[placeNum]}
-            handleLogin={props.handleLogin}
-            country={props.country}
-          />
-          <>{placeDescription}</>
-          {placeNum > props.selectedPlaces ? (
-            <></>
-          ) : (
-            <button
-              onClick={handleClickRight}
-              className="Places-rightclick"
-              style={{ backgroundImage: { rightClick } }}
-            >
-              V
-            </button>
-          )}
-        </>
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            background: "rgba(0, 0, 0, 0.5)",
+          }}
+        >
+          <div className="Places-secondPage">
+            <Like
+              userId={props.userId}
+              placeIdx={props.selectedPlaces[placeNum]}
+              handleLogin={props.handleLogin}
+              country={props.country}
+              className="Places-likeButton"
+            />
+            <div className="Place-description">{placeDescription}</div>
+            {placeNum + 1 >= props.selectedPlaces.length ? (
+              <></>
+            ) : (
+              <button
+                onClick={handleClickRight}
+                className="Places-rightclick"
+                style={{ backgroundImage: { rightClick } }}
+              >
+                V
+              </button>
+            )}
+          </div>
+        </div>
       )}
     </div>
   );

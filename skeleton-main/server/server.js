@@ -39,7 +39,7 @@ const socketManager = require("./server-socket");
 const mongoConnectionURL =
   "mongodb+srv://zamanova:VIx9dbibq8zasFVC@cluster0.ppkssl5.mongodb.net/?retryWrites=true&w=majority";
 // TODO change database name to the name you chose
-const databaseName = "Cluster0";
+const databaseName = "AncientAdventures";
 
 // mongoose 7 warning
 mongoose.set("strictQuery", false);

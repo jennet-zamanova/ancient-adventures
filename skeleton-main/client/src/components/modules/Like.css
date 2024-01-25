@@ -1,6 +1,6 @@
 .Like-heartButton {
   border: none;
-  background-color: var(--grey);
+  background-color: transparent;
 }
 .Like-heart {
   width: var(--xl);

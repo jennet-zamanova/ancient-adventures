@@ -53,8 +53,11 @@ router.get("/countries", (req, res) => {
 
 router.get("/places", (req, res) => {
   console.log("country:", req.query.country);
+  Country.find().then((places) => {
+    console.log("all places", places);
+  });
   Country.find({ country: req.query.country }).then((placesObj) => {
-    console.log(placesObj);
+    console.log("placesObj", placesObj);
     res.send(placesObj[0].places);
   });
 });
@@ -68,26 +71,28 @@ router.get("/place", (req, res) => {
 
 router.get("/place/user", (req, res) => {
   User.findById(req.query.userId).then((user) => {
+    console.log("userId", req.query.userId);
     res.send(user.likedPlaces.includes(req.query.placeIdx));
   });
 });
 
 router.post("/place/user", (req, res) => {
-  User.findById(req.user.userId).then((user) => {
+  console.log("teh user", req.body);
+  User.findById(req.body.userId).then((user) => {
     const likedPlaces = user.likedPlaces;
     const likedCountries = user.likedCountries;
-    if (likedPlaces.includes(req.user.placeIdx)) {
-      likedPlaces = likedPlaces.filter((item) => item !== req.user.placeIdx);
+    if (likedPlaces.includes(req.body.placeIdx)) {
+      likedPlaces = likedPlaces.filter((item) => item !== req.body.placeIdx);
     } else {
-      likedPlaces.push(req.user.placeIdx);
+      likedPlaces.push(req.body.placeIdx);
     }
-    if (likedCountries.includes(req.user.country)) {
-      likedCountries = likedCountries.filter((item) => item !== req.user.country);
+    if (likedCountries.includes(req.body.country)) {
+      likedCountries = likedCountries.filter((item) => item !== req.body.country);
     } else {
-      likedCountries.push(req.user.country);
+      likedCountries.push(req.body.country);
     }
     User.updateOne(
-      { _id: req.user.userId }, // specify the condition
+      { _id: req.body.userId }, // specify the condition
       {
         $set: {
           likedPlaces: likedPlaces, // specify the field and its new value

@@ -6,6 +6,7 @@ import "../../utilities.css";
 import { socket } from "../../client-socket.js";
 
 import { get, post } from "../../utilities";
+import place from "../../../../server/models/place.js";
 
 const Explore = (props) => {
   const [countries, setCountries] = useState(["Turkmenistan"]);
@@ -28,6 +29,7 @@ const Explore = (props) => {
     await get("/api/places/", { country: country }).then((placesObj) => {
       setPlaces(placesObj);
       data = placesObj;
+      console.log("this is data", data);
     });
   };
 
@@ -55,20 +57,21 @@ const Explore = (props) => {
     // setCountry(countries[getRandomInt(0, countries.length)]); TODO
     console.log("country", selectedCountry);
     await getPlacesFromCountry(selectedCountry);
-    const randomIdx = getRandomNumbersInRange(getRandomInt(2, data.length - 1), 0, places.length);
-    console.log(randomIdx);
+    const randomIdx = getRandomNumbersInRange(getRandomInt(2, data.length - 1), 0, data.length - 1);
+    console.log("idx", randomIdx);
     setPlaces(Array.from(randomIdx).map((index) => data[index]));
-    console.log(places);
   };
 
   useEffect(getCountries, []);
   useEffect(() => {
     selectPlacesRandomly(countries);
   }, []);
+  useEffect(() => {
+    console.log("useplaces", places);
+  }, [places]);
 
   return (
     <>
-      This is Explore
       <Places
         selectedPlaces={places}
         userId={props.userId}

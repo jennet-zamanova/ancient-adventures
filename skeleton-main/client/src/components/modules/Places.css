@@ -14,3 +14,37 @@
   height: var(--xl);
   rotate: -90deg;
 }
+#place-div-container {
+  position: relative;
+  width: 100vw; /* 100% of the viewport width */
+  height: 92.5vh; /* 100% of the viewport height */
+  overflow: hidden; /* Hide any overflow */
+}
+#place-div {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  /* position: relative; */
+  text-align: center;
+  object-fit: cover;
+}
+
+.Places-secondPage {
+  background-blend-mode: darken;
+  color: var(--grey);
+}
+
+.Place-likeButton {
+  position: absolute;
+  right: 95%;
+  bottom: 85%;
+}
+
+.Place-description {
+  text-align: center;
+  position: absolute;
+  padding: 0 128px;
+  margin: 0 128px;
+  bottom: 50%;
+}

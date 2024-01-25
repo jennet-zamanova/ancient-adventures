@@ -24,12 +24,13 @@ const Like = (props) => {
   }, []);
 
   const handleClick = () => {
-    if (!props.userId) {
+    if (props.userId == undefined) {
       <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
         <GoogleLogin onSuccess={props.handleLogin} onError={(err) => console.log(err)} />
       </GoogleOAuthProvider>;
     }
     setLiked(!isLiked);
+    console.log(userId);
     post("/api/place/user", { userId: props.userId, isLiked: isLiked, country: props.country });
   };
   return (

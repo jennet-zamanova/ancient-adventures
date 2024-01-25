@@ -23,18 +23,20 @@ const Skeleton = ({ userId, handleLogin, handleLogout }) => {
   };
   return (
     <div className="NavBar-container u-flex u-textCenter u-flex-justifyCenter">
-      <Link path="/" className="u-bold NavBar-title">
+      <Link to="/" className="u-bold NavBar-title">
         AncientAdventures
       </Link>
       <div className="u-flex u-flex-alignCenter NavBar-linkContainer">
         <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className="u-flex">
-          <Link className="NavBar-link">Central Asia</Link>
+          <Link className="NavBar-link" to="/explore/">
+            Central Asia
+          </Link>
           {isDropdownVisible ? <DropDownMenu countries={countries} /> : <></>}
         </div>
-        <Link path="/cuisine/" className="NavBar-link">
+        <Link to="/cuisine/" className="NavBar-link">
           Cuisine
         </Link>
-        <Link path="/culture/" className="NavBar-link">
+        <Link to="/culture/" className="NavBar-link">
           Culture
         </Link>
       </div>

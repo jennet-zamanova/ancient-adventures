@@ -2,6 +2,7 @@
 .NavBar-container {
   padding: var(--s) var(--m);
   background-color: var(--primary-light);
+  height: 5vh;
 }
 
 .NavBar-title {

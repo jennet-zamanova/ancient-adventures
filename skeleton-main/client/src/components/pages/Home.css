@@ -1,15 +1,19 @@
 .Home-heading {
   color: var(--primary);
   font-size: 80px;
-  padding: var(--l) var(--m) var(--m);
+  padding: var(--l) 30%;
 }
 
 .Home-body {
-  width: 60%;
-  height: 60%;
+  /* width: 60%;
+  height: 60%; */
   /* background-color: var(--grey); */
-  padding: 0 20%;
-  margin: auto;
+  /* padding: 0 20%; */
+  /* margin: auto; */
+  position: relative;
+  width: 100vw; /* 100% of the viewport width */
+  height: 92.5vh; /* 100% of the viewport height */
+  overflow: hidden; /* Hide any overflow */
 }
 
 .Home-button {
@@ -30,6 +34,7 @@
 
 .Home-img {
   position: absolute;
-  width: 100%;
+  width: 100vw;
   opacity: 75%;
+  object-fit: cover;
 }
