@@ -1,0 +1,32 @@
+/* Dropdown.css */
+ul {
+  list-style-type: none;
+}
+
+li {
+  padding: 4px;
+}
+
+.dropdown-content {
+  position: absolute;
+  background-color: var(--primary-light);
+  z-index: 1;
+  color: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2);
+  padding: 4px;
+}
+
+.dropdown-content p {
+  /* padding: 12px 16px; */
+  text-decoration: none;
+  display: block;
+  cursor: pointer;
+}
+
+.dropdown-content p:hover {
+  background-color: var(--primary-dark);
+}
+
+.dropdown-container:hover .dropdown-content {
+  display: block;
+}

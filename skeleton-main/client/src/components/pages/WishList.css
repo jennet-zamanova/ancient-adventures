@@ -1,0 +1,39 @@
+.WishList-container {
+  margin: var(--m);
+}
+.WishList-placeImg {
+  height: 160px;
+  margin: var(--xs);
+  border-radius: var(--m);
+}
+
+.WishList-placeImg-notSelected {
+  border: var(--s) solid transparent;
+}
+
+.WishList-placeImg-selected {
+  border: var(--s) solid var(--primary-light);
+}
+
+.WishList-button {
+  background-color: var(--na);
+  border-radius: var(--s);
+  padding: var(--s);
+  margin: var(--s);
+  border-color: var(--primary-light);
+  /* width: 240px; */
+  /* height: var(--xl); */
+}
+
+.WishList-button-text {
+  text-decoration: none;
+  color: var(--primary);
+  font-size: var(--m);
+  font-weight: bold;
+}
+
+.WishList-countryText {
+  color: var(--primary);
+  font-size: var(--l);
+  font-weight: bold;
+}

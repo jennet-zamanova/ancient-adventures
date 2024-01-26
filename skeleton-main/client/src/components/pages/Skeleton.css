@@ -36,3 +36,11 @@
 .NavBar-link + .NavBar-link {
   margin-left: var(--m);
 }
+
+.Skeleton-dropDownContainer {
+  display: inline-block;
+}
+
+.Skeleton-dropDownButton {
+  position: relative;
+}

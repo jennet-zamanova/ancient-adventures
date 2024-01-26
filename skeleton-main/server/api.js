@@ -65,7 +65,7 @@ router.get("/places", (req, res) => {
 router.get("/place", (req, res) => {
   Place.find({ placeIdx: req.query.placeIdx }).then((placeObj) => {
     res.send(placeObj);
-    console.log(placeObj);
+    // console.log(placeObj);
   });
 });
 
@@ -76,38 +76,67 @@ router.get("/place/user", (req, res) => {
   });
 });
 
-router.post("/place/user", (req, res) => {
-  console.log("teh user", req.body);
-  User.findById(req.body.userId).then((user) => {
-    const likedPlaces = user.likedPlaces;
-    const likedCountries = user.likedCountries;
-    if (likedPlaces.includes(req.body.placeIdx)) {
-      likedPlaces = likedPlaces.filter((item) => item !== req.body.placeIdx);
-    } else {
-      likedPlaces.push(req.body.placeIdx);
-    }
-    if (likedCountries.includes(req.body.country)) {
-      likedCountries = likedCountries.filter((item) => item !== req.body.country);
-    } else {
-      likedCountries.push(req.body.country);
-    }
-    User.updateOne(
-      { _id: req.body.userId }, // specify the condition
+const updateUser = async (req, res) => {
+  const [likedPlaces, likedCountries, id] = req;
+
+  try {
+    await User.updateOne(
+      { _id: id },
       {
         $set: {
-          likedPlaces: likedPlaces, // specify the field and its new value
+          likedPlaces: likedPlaces,
           likedCountries: likedCountries,
         },
       }
     );
+
+    // Handle success (send a response, etc.)
+    res.status(200).json({ message: "Update successful" });
+  } catch (error) {
+    // Handle error (send an error response, log the error, etc.)
+    console.error("Update failed:", error);
+    res.status(500).json({ message: "Update failed" });
+  }
+};
+
+router.post("/place/user", (req, res) => {
+  User.findById(req.body.userId).then((user) => {
+    let likedPlaces = user.likedPlaces;
+    let likedCountries = user.likedCountries;
+    if (likedPlaces.includes(req.body.placeIdx)) {
+      if (likedPlaces.length === 1) {
+        likedCountries = [];
+      }
+      likedPlaces = likedPlaces.filter((item) => item !== req.body.placeIdx);
+    } else {
+      console.log("liked placess", likedPlaces);
+      console.log("liked countriess", likedCountries);
+      if (likedPlaces.length === 0) {
+        likedCountries.push(req.body.country);
+      }
+      likedPlaces.push(req.body.placeIdx);
+    }
+    // if (likedCountries.includes(req.body.country)) {
+    //   likedCountries = likedCountries.filter((item) => item !== req.body.country);
+    // } else {
+    //   likedCountries.push(req.body.country);
+    // } TODO manage more than one country
+    console.log("locations", likedPlaces, likedCountries);
+    updateUser([likedPlaces, likedCountries, req.body.userId], res);
   });
 });
 
 router.get("/wishlist", (req, res) => {
-  User.findById(req.user.userId).then((user) => {
-    res.send({ likedPlaces: user.likedPlaces, likedCountries: user.likedCountries });
-  });
+  console.log(req.query);
+  if (req.query.userId !== undefined && req.query.userId !== "undefined") {
+    User.findById(req.query.userId).then((user) => {
+      res.send({ likedPlaces: user.likedPlaces, likedCountries: user.likedCountries });
+    });
+  } else {
+    console.log("please log in");
+  }
 });
+
 // anything else falls to this "not found" case
 router.all("*", (req, res) => {
   console.log(`API route not found: ${req.method} ${req.url}`);

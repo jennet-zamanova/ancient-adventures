@@ -19,7 +19,7 @@ const Skeleton = ({ userId, handleLogin, handleLogout }) => {
   };
 
   const handleMouseLeave = () => {
-    setDropdownVisible(false);
+    // setDropdownVisible(false);
   };
   return (
     <div className="NavBar-container u-flex u-textCenter u-flex-justifyCenter">
@@ -27,8 +27,12 @@ const Skeleton = ({ userId, handleLogin, handleLogout }) => {
         AncientAdventures
       </Link>
       <div className="u-flex u-flex-alignCenter NavBar-linkContainer">
-        <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className="u-flex">
-          <Link className="NavBar-link" to="/explore/">
+        <div
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          className="Skeleton-dropDownContainer"
+        >
+          <Link className="NavBar-link Skeleton-dropDownButton" to="/explore/">
             Central Asia
           </Link>
           {isDropdownVisible ? <DropDownMenu countries={countries} /> : <></>}
