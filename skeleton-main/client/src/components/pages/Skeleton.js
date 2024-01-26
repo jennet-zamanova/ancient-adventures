@@ -19,7 +19,7 @@ const Skeleton = ({ userId, handleLogin, handleLogout }) => {
   };
 
   const handleMouseLeave = () => {
-    // setDropdownVisible(false);
+    setDropdownVisible(false);
   };
   return (
     <div className="NavBar-container u-flex u-textCenter u-flex-justifyCenter">
