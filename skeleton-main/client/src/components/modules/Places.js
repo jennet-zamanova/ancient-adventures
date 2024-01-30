@@ -27,6 +27,11 @@ const Places = (props) => {
     setPlaceNum(placeNum + 1);
   };
 
+  const handleClickLeft = () => {
+    setPageNum(0);
+    setPlaceNum(placeNum - 1);
+  };
+
   const getPlaceInformation = (placeNumber) => {
     // get Image and Description from db
     // console.log("placenum", placeNum);
@@ -60,12 +65,8 @@ const Places = (props) => {
     <div id="place-div-container">
       <img src={placeImg} id="place-div"></img>
       {pageNum == 0 ? (
-        <button
-          onClick={handleClickDown}
-          className="Places-downclick"
-          style={{ backgroundImage: { downClick } }}
-        >
-          V
+        <button onClick={handleClickDown} className="Places-downclick Place-click">
+          <img src={downClick} />
         </button>
       ) : (
         <div
@@ -90,12 +91,17 @@ const Places = (props) => {
             {placeNum + 1 >= props.selectedPlaces.length ? (
               <></>
             ) : (
-              <button
-                onClick={handleClickRight}
-                className="Places-rightclick"
-                style={{ backgroundImage: { rightClick } }}
-              >
-                V
+              <>
+                <button onClick={handleClickRight} className="Places-rightclick Place-click">
+                  <img src={rightClick} />
+                </button>
+              </>
+            )}
+            {placeNum === 0 ? (
+              <></>
+            ) : (
+              <button onClick={handleClickLeft} className="Places-leftclick Place-click">
+                <img src={rightClick} />
               </button>
             )}
           </div>

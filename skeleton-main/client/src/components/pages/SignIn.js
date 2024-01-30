@@ -13,7 +13,10 @@ const GOOGLE_CLIENT_ID = "858506206421-kcggq02bpfo0ntheakfd0fnd6k5pm19m.apps.goo
 const SignIn = ({ userId, handleLogin, handleLogout }) => {
   const navigate = useNavigate();
   return (
-    <div className="NavBar-container u-flex u-textCenter u-flex-justifyCenter">
+    <div
+      className="NavBar-container u-flex u-textCenter u-flex-justifyCenter"
+      style={{ backgroundColor: "transparent" }}
+    >
       <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID} className="NavBar-login">
         {userId ? (
           <>
@@ -32,7 +35,9 @@ const SignIn = ({ userId, handleLogin, handleLogout }) => {
         ) : (
           <>
             {" "}
-            <p>Please LogIn first)</p>
+            <p style={{ margin: "8px" }}>Please SignIn first)</p>
+            {"   "}
+            <> </>
             <GoogleLogin
               onSuccess={(credentialResponse) => {
                 handleLogin(credentialResponse);

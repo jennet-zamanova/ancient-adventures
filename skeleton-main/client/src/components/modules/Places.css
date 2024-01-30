@@ -1,19 +1,31 @@
-.Places-downclick {
+.Place-click {
+  background-color: transparent;
+  border: none;
   position: absolute;
-  bottom: 0;
+
+  width: 36px;
+  height: 64px;
+  cursor: pointer;
+}
+
+.Places-downclick {
+  bottom: 2%;
   right: 50%;
-  width: var(--xl);
-  height: var(--xl);
+  width: 64px;
+  height: 36px;
 }
 
 .Places-rightclick {
-  position: absolute;
   bottom: 50%;
-  right: 0;
-  width: var(--xl);
-  height: var(--xl);
-  rotate: -90deg;
+  right: 1%;
 }
+
+.Places-leftclick {
+  bottom: 50%;
+  right: 97%;
+  rotate: 180deg;
+}
+
 #place-div-container {
   position: relative;
   width: 100vw; /* 100% of the viewport width */

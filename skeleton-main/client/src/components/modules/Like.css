@@ -5,4 +5,5 @@
 .Like-heart {
   width: var(--xl);
   height: var(--xl);
+  overflow: clip;
 }

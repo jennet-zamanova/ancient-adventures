@@ -10,8 +10,6 @@ import { get, post } from "../../utilities";
 import greyHeart from "/client/images/grey-heart.svg";
 import redHeart from "/client/images/red-heart.svg";
 
-const GOOGLE_CLIENT_ID = "858506206421-kcggq02bpfo0ntheakfd0fnd6k5pm19m.apps.googleusercontent.com";
-
 const Like = (props) => {
   const navigate = useNavigate();
   const [isLiked, setLiked] = useState(undefined);
@@ -68,7 +66,7 @@ const Like = (props) => {
           }
         </button>
       ) : (
-        <button onClick={handleClickSignIn}>
+        <button onClick={handleClickSignIn} className="Like-heartButton">
           {" "}
           <img src={greyHeart} className="Like-heart" />
           {/* <Link to="/signin/"></Link> */}
