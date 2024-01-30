@@ -25,7 +25,6 @@ const Places = (props) => {
   const handleClickRight = () => {
     setPageNum(0);
     setPlaceNum(placeNum + 1);
-    // getPlaceInformation(placeNum);
   };
 
   const getPlaceInformation = (placeNumber) => {

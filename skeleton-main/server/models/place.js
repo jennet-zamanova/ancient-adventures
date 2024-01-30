@@ -5,6 +5,7 @@ const PlaceSchema = new mongoose.Schema({
   placeIdx: String,
   img: String,
   description: String,
+  travelTips: { type: String, default: "" },
 });
 
 // compile model from schema

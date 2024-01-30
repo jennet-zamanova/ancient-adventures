@@ -1,7 +1,7 @@
 .Home-heading {
   color: var(--primary);
   font-size: 80px;
-  padding: var(--l) 30%;
+  padding: 5% 30%;
 }
 
 .Home-body {
@@ -35,6 +35,8 @@
 .Home-img {
   position: absolute;
   width: 100vw;
+  height: 93vh;
+  overflow: hidden;
   opacity: 75%;
   object-fit: cover;
 }

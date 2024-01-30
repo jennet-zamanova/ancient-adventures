@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import jwt_decode from "jwt-decode";
 
@@ -14,6 +14,7 @@ import "../utilities.css";
 import { socket } from "../client-socket.js";
 
 import { get, post } from "../utilities";
+import SignIn from "./pages/SignIn.js";
 
 /**
  * Define the "App" component
@@ -48,23 +49,23 @@ const App = () => {
   return (
     <>
       <Skeleton handleLogin={handleLogin} handleLogout={handleLogout} userId={userId} />
+      {/* <BrowserRouter> */}
       <Routes>
-        <Route path="/" element={<Home userId={userId} />} />
-        {/* <Route
-          path="/"
-          element={
-            <Skeleton
-              path="/"
-              handleLogin={handleLogin}
-              handleLogout={handleLogout}
-              userId={userId}
-            />
-          }
-        /> */}
-        <Route path="/explore/" element={<Explore userId={userId} handleLogin={handleLogin} />} />
-        <Route path="/wishlist/" element={<WishList userId={userId} />} />
-        <Route path="*" element={<NotFound />} />
+        <Route exact path="/" element={<Home userId={userId} />} />
+        <Route
+          exact
+          path="/explore/"
+          element={<Explore userId={userId} handleLogin={handleLogin} country="" />}
+        />
+        <Route exact path="/wishlist/" element={<WishList userId={userId} />} />
+        <Route exact path="*" element={<NotFound />} />
+        <Route
+          exact
+          path="/signin/"
+          element={<SignIn userId={userId} handleLogin={handleLogin} handleLogout={handleLogout} />}
+        />
       </Routes>
+      {/* </BrowserRouter> */}
     </>
   );
 };

@@ -17,7 +17,7 @@
 #place-div-container {
   position: relative;
   width: 100vw; /* 100% of the viewport width */
-  height: 92.5vh; /* 100% of the viewport height */
+  height: 93vh; /* 100% of the viewport height */
   overflow: hidden; /* Hide any overflow */
 }
 #place-div {

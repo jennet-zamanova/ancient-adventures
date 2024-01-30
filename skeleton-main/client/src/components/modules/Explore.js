@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Places from "./Places.js";
+import { useLocation } from "react-router-dom";
 
 import "../../utilities.css";
 
@@ -9,19 +10,24 @@ import { get, post } from "../../utilities";
 import place from "../../../../server/models/place.js";
 
 const Explore = (props) => {
-  const [countries, setCountries] = useState(["Turkmenistan"]);
+  // const [countries, setCountries] = useState(["Turkmenistan"]);
   const [places, setPlaces] = useState([]);
-  const [selectedCountry, setCountry] = useState("Turkmenistan");
+  const [selectedCountry, setCountry] = useState("");
   let data;
+  const location = useLocation();
+  const country = location.state?.country;
 
-  const getCountries = () => {
-    // get countries from db
-    // get("/api/countries/").then((countriesObj) => {
-    //   setCountries(countriesObj);
-    //   return countriesObj;
-    // }); TODO
-    setCountry("Turkmenistan");
-    // return ["Turkmenistan"];
+  const getCountries = (country = "") => {
+    if (country === "") {
+      // get countries from db
+      get("/api/countries/").then((countriesObj) => {
+        console.log("selecting THE COUNTRY:", countriesObj);
+        const idx = getRandomInt(0, countriesObj.length - 1);
+        setCountry(countriesObj[idx]);
+      }); //TODO
+    } else {
+      setCountry(country);
+    }
   };
 
   const getPlacesFromCountry = async (country) => {
@@ -51,21 +57,33 @@ const Explore = (props) => {
 
     return randomNumbers;
   };
-  const selectPlacesRandomly = async (countries) => {
-    console.log("countries: ", countries);
-    // setCountries(await getCountries());
-    // setCountry(countries[getRandomInt(0, countries.length)]); TODO
-    console.log("country", selectedCountry);
+  const selectPlacesRandomly = async () => {
     await getPlacesFromCountry(selectedCountry);
+    console.log("getting places finished");
     const randomIdx = getRandomNumbersInRange(getRandomInt(2, data.length - 1), 0, data.length - 1);
     console.log("idx", randomIdx);
     setPlaces(Array.from(randomIdx).map((index) => data[index]));
   };
 
-  useEffect(getCountries, []);
   useEffect(() => {
-    selectPlacesRandomly(countries);
+    console.log("props: ", country);
+    if (country === undefined) {
+      getCountries();
+    } else {
+      getCountries(country);
+    }
   }, []);
+  useEffect(() => {
+    if (selectedCountry !== "") {
+      selectPlacesRandomly();
+
+      console.log("selected country", selectedCountry);
+    }
+    console.log("selected country", selectedCountry);
+  }, [selectedCountry]);
+  //   useEffect(() => {
+  //     selectPlacesRandomly(countries);
+  //   }, []);
   useEffect(() => {
     console.log("useplaces", places);
   }, [places]);

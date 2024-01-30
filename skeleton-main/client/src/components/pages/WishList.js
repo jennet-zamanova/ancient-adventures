@@ -1,136 +1,98 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-
-import Country from "../modules/Country";
-
-import "../../utilities.css";
-import "./Skeleton.css";
-import "./WishList.css";
-
-import { get, post } from "../../utilities";
+import React, { useState, useEffect, useRef } from "react";
+import { get } from "../../utilities";
+import WishListPlace from "../modules/WishListPlace";
 
 const WishList = (props) => {
   const [likedCountries, setCountries] = useState([]);
-  const [likedPlaces, setPlaces] = useState([]);
-  const [dataReady, setDataReady] = useState(false);
   const [countriesToRender, setCountriesToRender] = useState(null);
-  const [placesToRender, setPlacesToRender] = useState(null);
-  const [selectedPlaces, setSelectedPlaces] = useState([]);
-
+  const selectedPlacesRef = useRef({});
+  const [likedPlaces, setPlaces] = useState([]);
   const [hasClickedTravel, setHasClickedTravel] = useState(false);
+  const [travelTips, setTravelTips] = useState("");
 
-  const getPlaceInformation = async (placeNumber) => {
-    // get Image and Description from db
-    let imgname = "";
-    await get("/api/place/", { placeIdx: placeNumber }).then((placeInfo) => {
-      if (placeInfo != []) {
-        imgname = "data:image/jpg;base64," + placeInfo[0].img;
-      }
-    });
-    return imgname;
-  };
+  const handleClickImage = (place, country) => {
+    const selPlaces = { ...selectedPlacesRef.current };
 
-  const handleClickImage = (place) => {
-    console.log(selectedPlaces);
-    if (selectedPlaces.length !== 0 && selectedPlaces.includes(place)) {
-      setSelectedPlaces(selectedPlaces.filter((item) => item !== place));
+    if (
+      selectedPlacesRef.current !== undefined &&
+      selectedPlacesRef.current[country] !== undefined &&
+      selectedPlacesRef.current[country].includes(place)
+    ) {
+      // need to remove
+      selPlaces[country] = selectedPlacesRef.current[country].filter((item) => item !== place);
     } else {
-      setSelectedPlaces((selectedPlaces) => [...selectedPlaces, place]);
+      // need to add
+      if (selPlaces[country] === undefined) {
+        selPlaces[country] = [place];
+      } else {
+        selPlaces[country] = [...selPlaces[country], place];
+      }
     }
+
+    selectedPlacesRef.current = selPlaces;
+    setCountriesToRender((prev) => [...prev]); // Trigger a re-render
+    console.log("after", selectedPlacesRef.current);
   };
 
   const handleClickTravel = (country) => {
-    console.log(
-      "this function is not yet working. your # of selected places: ",
-      selectedPlaces.length,
-      " in ",
-      country
-    );
-    setHasClickedTravel(true);
+    console.log(selectedPlacesRef.current);
+    get("/api/travel/", { selectedPlaces: selectedPlacesRef.current[country] }).then((tipsObj) => {
+      setTravelTips(tipsObj.result);
+    });
+    console.log("Loading");
   };
 
   useEffect(() => {
-    const fetchPlaceInformation = async (place) => {
-      try {
-        const placeInfo = await getPlaceInformation(place);
-        console.log("place", place);
-        const imgClassName =
-          "WishList-placeImg " +
-          (selectedPlaces.includes(place)
-            ? "WishList-placeImg-selected"
-            : "WishList-placeImg-notSelected");
-        return (
-          <img
-            className={imgClassName}
-            key={place}
-            src={placeInfo}
-            onClick={() => {
-              handleClickImage(place);
-            }}
-          ></img>
-        );
-      } catch (error) {
-        console.error(`Error fetching place information for ${place}:`, error);
-        return null;
-      }
-    };
-
-    const renderPlaces = async () => {
-      if (likedPlaces && likedPlaces.length > 0) {
-        const renderedPlaces = await Promise.all(likedPlaces.map(fetchPlaceInformation));
-        setPlacesToRender(renderedPlaces.filter((place) => place !== null));
-        console.log("the places", placesToRender);
-        setDataReady(true);
-      }
-    };
-
-    renderPlaces();
-  }, [likedPlaces, selectedPlaces]);
+    if (travelTips !== "") {
+      setHasClickedTravel(true);
+    }
+  }, [travelTips]);
 
   useEffect(() => {
     get("/api/wishlist/", { userId: props.userId }).then((locations) => {
       console.log("locations", locations);
-      setCountries(locations.likedCountries);
-      setPlaces(locations.likedPlaces);
+      setCountries(locations.map((obj) => obj.country));
+      setPlaces(locations);
     });
   }, [props.userId]);
 
   useEffect(() => {
-    if (dataReady) {
+    console.log("selected places", selectedPlacesRef.current);
+    if (likedCountries) {
       console.log("the data is ready");
       // Update to return JSX elements inside map
       const mappedElements = likedCountries.map((country) => (
         <div key={country} className="WishList-countryText">
-          {country}
-          <button
-            className="WishList-button WishList-button-text"
-            onClick={() => {
-              handleClickTravel(country);
-            }}
-          >
-            Travel
-          </button>
+          <div>
+            {country}
+            <button
+              className="WishList-button WishList-button-text"
+              onClick={() => {
+                handleClickTravel(country);
+              }}
+            >
+              Travel
+            </button>
+          </div>
+          <>
+            {console.log(selectedPlacesRef.current)}
+            <WishListPlace
+              handleClick={handleClickImage}
+              places={likedPlaces.find((obj) => obj.country === country).likedPlaces}
+              selectedPlacesW={selectedPlacesRef.current[country]}
+              country={country}
+            />
+          </>
         </div>
       ));
       setCountriesToRender(mappedElements);
     }
-  }, [dataReady]);
-
-  useEffect(() => {
-    console.log("countries rendered", countriesToRender);
-  }, [countriesToRender]);
+  }, [likedCountries, selectedPlacesRef.current]);
 
   return (
     <div className="WishList-container">
-      {hasClickedTravel && (
-        <div>
-          this function is not yet working. your # of selected places: {selectedPlaces.length} in{" "}
-          {likedCountries[selectedPlaces.length - 1]}
-        </div>
-      )}
-      {dataReady ? <></> : <div>Loading</div>}
       {countriesToRender}
-      <div>{placesToRender}</div>
+      {hasClickedTravel && <div>Here are some travel tips {travelTips}</div>}
     </div>
   );
 };

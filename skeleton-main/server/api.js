@@ -6,7 +6,8 @@
 | This file defines the routes for your server.
 |
 */
-const ALL_COUNTRIES = ["Turkmenistan, Kazahkstan, Uzbekistan, Tajikistan, Kyrgyzstan"];
+// const ALL_COUNTRIES = ["Turkmenistan", "Kazahkstan", "Uzbekistan", "Tajikistan", "Kyrgyzstan"];
+const ALL_COUNTRIES = ["Turkmenistan", "Uzbekistan"];
 
 const express = require("express");
 
@@ -14,6 +15,7 @@ const express = require("express");
 const User = require("./models/user");
 const Country = require("./models/country");
 const Place = require("./models/place");
+const LikedLocations = require("./models/likedLocations");
 
 // import authentication library
 const auth = require("./auth");
@@ -58,7 +60,12 @@ router.get("/places", (req, res) => {
   });
   Country.find({ country: req.query.country }).then((placesObj) => {
     console.log("placesObj", placesObj);
-    res.send(placesObj[0].places);
+    if (placesObj.length != 0) {
+      console.log(placesObj);
+      res.send(placesObj[0].places);
+    } else {
+      res.send([]);
+    }
   });
 });
 
@@ -72,20 +79,27 @@ router.get("/place", (req, res) => {
 router.get("/place/user", (req, res) => {
   User.findById(req.query.userId).then((user) => {
     console.log("userId", req.query.userId);
-    res.send(user.likedPlaces.includes(req.query.placeIdx));
+    let sendm = false;
+    if (user.likedLocations.some((obj) => obj.country === req.query.country)) {
+      const location = user.likedLocations.find((obj) => obj.country === req.query.country);
+      console.log("location", location);
+      sendm = location.likedPlaces.includes(req.query.placeIdx);
+    }
+    res.send(sendm);
   });
 });
 
 const updateUser = async (req, res) => {
-  const [likedPlaces, likedCountries, id] = req;
+  // const [likedPlaces, likedCountries, id] = req;
+  const [likedLocations, id] = req;
 
   try {
     await User.updateOne(
       { _id: id },
       {
         $set: {
-          likedPlaces: likedPlaces,
-          likedCountries: likedCountries,
+          likedLocations: likedLocations,
+          // likedCountries: likedCountries,
         },
       }
     );
@@ -101,28 +115,36 @@ const updateUser = async (req, res) => {
 
 router.post("/place/user", (req, res) => {
   User.findById(req.body.userId).then((user) => {
-    let likedPlaces = user.likedPlaces;
-    let likedCountries = user.likedCountries;
-    if (likedPlaces.includes(req.body.placeIdx)) {
-      if (likedPlaces.length === 1) {
-        likedCountries = [];
+    let likedLocations = user.likedLocations;
+    if (likedLocations.some((obj) => obj.country === req.body.country)) {
+      // locations of the country
+      let location = likedLocations.find((obj) => obj.country === req.body.country);
+      // remove that field
+      likedLocations = likedLocations.filter((obj) => obj.country !== req.body.country);
+      // location is already liked
+      if (location.likedPlaces.includes(req.body.placeIdx)) {
+        // only one location liked from the country
+        if (location.likedPlaces.length !== 1) {
+          location.likedPlaces = location.likedPlaces.filter((obj) => obj !== req.body.placeIdx);
+          likedLocations.push(location);
+        }
       }
-      likedPlaces = likedPlaces.filter((item) => item !== req.body.placeIdx);
-    } else {
-      console.log("liked placess", likedPlaces);
-      console.log("liked countriess", likedCountries);
-      if (likedPlaces.length === 0) {
-        likedCountries.push(req.body.country);
+      // location is not liked yet
+      else {
+        location.likedPlaces.push(req.body.placeIdx);
+        likedLocations.push(location);
       }
-      likedPlaces.push(req.body.placeIdx);
     }
-    // if (likedCountries.includes(req.body.country)) {
-    //   likedCountries = likedCountries.filter((item) => item !== req.body.country);
-    // } else {
-    //   likedCountries.push(req.body.country);
-    // } TODO manage more than one country
-    console.log("locations", likedPlaces, likedCountries);
-    updateUser([likedPlaces, likedCountries, req.body.userId], res);
+    // no location liked from country yet
+    else {
+      const location = {};
+      location["country"] = req.body.country;
+      location["likedPlaces"] = [req.body.placeIdx];
+      likedLocations.push(location);
+    }
+
+    console.log("locations", likedLocations);
+    updateUser([likedLocations, req.body.userId], res); //update mongodb
   });
 });
 
@@ -130,11 +152,24 @@ router.get("/wishlist", (req, res) => {
   console.log(req.query);
   if (req.query.userId !== undefined && req.query.userId !== "undefined") {
     User.findById(req.query.userId).then((user) => {
-      res.send({ likedPlaces: user.likedPlaces, likedCountries: user.likedCountries });
+      res.send(user.likedLocations);
     });
   } else {
     console.log("please log in");
   }
+});
+
+router.get("/travel", (req, res) => {
+  console.log(req.query.selectedPlaces.split(","));
+  console.log(typeof req.query.selectedPlaces.split(","));
+  Place.find({ placeIdx: { $in: req.query.selectedPlaces.split(",") } }).then((result) => {
+    let results = result.map((obj) => obj.travelTips);
+    console.log(results);
+    results = results.join(" ");
+    console.log(results);
+    console.log(typeof results);
+    res.send({ result: results });
+  });
 });
 
 // anything else falls to this "not found" case
