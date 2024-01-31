@@ -1,0 +1,10 @@
+.Cuisine-dishes {
+  padding: var(--m);
+  font-size: large;
+  border-radius: var(--m);
+}
+
+.Cuisine-img {
+  border-radius: var(--m);
+  height: 256px;
+}

@@ -47,6 +47,10 @@ form {
   flex-grow: 1;
 }
 
+.u-primary {
+  color: var(--primary);
+}
+
 .u-flex {
   display: flex;
 }

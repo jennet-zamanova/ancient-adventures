@@ -40,6 +40,7 @@ const WishList = (props) => {
       setTravelTips(tipsObj.result);
     });
     console.log("Loading");
+    delete selectedPlacesRef.current[country];
   };
 
   useEffect(() => {

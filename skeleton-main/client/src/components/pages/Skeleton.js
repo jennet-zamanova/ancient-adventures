@@ -12,7 +12,7 @@ const GOOGLE_CLIENT_ID = "858506206421-kcggq02bpfo0ntheakfd0fnd6k5pm19m.apps.goo
 
 const Skeleton = ({ userId, handleLogin, handleLogout }) => {
   const [isDropdownVisible, setDropdownVisible] = useState(false);
-  const countries = ["Turkmenistan", "Uzbekistan", "Kazakhstan", "Tajikistan", "Kyrgyzstan"];
+  const countries = ["Turkmenistan", "Uzbekistan"];
 
   const handleMouseEnter = () => {
     setDropdownVisible(true);
@@ -40,9 +40,9 @@ const Skeleton = ({ userId, handleLogin, handleLogout }) => {
         <Link to="/cuisine/" className="NavBar-link">
           Cuisine
         </Link>
-        <Link to="/culture/" className="NavBar-link">
+        {/* <Link to="/culture/" className="NavBar-link">
           Culture
-        </Link>
+        </Link> */}
       </div>
       <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID} className="NavBar-login">
         {userId ? (

@@ -14,6 +14,7 @@ const DropDownMenu = (props) => {
             </Link>
           </li>
         ))}
+        <li>More to Come</li>
       </ul>
     </div>
   );

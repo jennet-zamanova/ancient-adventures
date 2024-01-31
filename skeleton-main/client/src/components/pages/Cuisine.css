@@ -1,0 +1,11 @@
+.Cuisine-heading {
+  color: var(--primary);
+  font-size: var(--xl);
+  padding: var(--xl) 20% var(--m);
+}
+
+.Cuisine-text {
+  padding: 0 var(--xl);
+  text-align: center;
+  font-size: large;
+}
