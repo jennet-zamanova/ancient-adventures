@@ -8,7 +8,6 @@ const DropDownMenu = (props) => {
       <ul className="dropdown-content">
         {props.countries.map((item, index) => (
           <li key={index}>
-            {console.log(item)}
             <Link to="/explore/" state={{ country: item }}>
               {item}
             </Link>

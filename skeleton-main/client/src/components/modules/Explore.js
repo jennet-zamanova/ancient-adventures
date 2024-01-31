@@ -21,7 +21,6 @@ const Explore = (props) => {
     if (country === "") {
       // get countries from db
       get("/api/countries/").then((countriesObj) => {
-        console.log("selecting THE COUNTRY:", countriesObj);
         const idx = getRandomInt(0, countriesObj.length - 1);
         setCountry(countriesObj[idx]);
       }); //TODO
@@ -35,7 +34,6 @@ const Explore = (props) => {
     await get("/api/places/", { country: country }).then((placesObj) => {
       setPlaces(placesObj);
       data = placesObj;
-      console.log("this is data", data);
     });
   };
 
@@ -59,14 +57,11 @@ const Explore = (props) => {
   };
   const selectPlacesRandomly = async () => {
     await getPlacesFromCountry(selectedCountry);
-    console.log("getting places finished");
     const randomIdx = getRandomNumbersInRange(getRandomInt(2, data.length - 1), 0, data.length - 1);
-    console.log("idx", randomIdx);
     setPlaces(Array.from(randomIdx).map((index) => data[index]));
   };
 
   useEffect(() => {
-    console.log("props: ", country);
     if (country === undefined) {
       getCountries();
     } else {
@@ -76,17 +71,9 @@ const Explore = (props) => {
   useEffect(() => {
     if (selectedCountry !== "") {
       selectPlacesRandomly();
-
-      console.log("selected country", selectedCountry);
     }
     console.log("selected country", selectedCountry);
   }, [selectedCountry]);
-  //   useEffect(() => {
-  //     selectPlacesRandomly(countries);
-  //   }, []);
-  useEffect(() => {
-    console.log("useplaces", places);
-  }, [places]);
 
   return (
     <>

@@ -46,27 +46,10 @@ const Skeleton = ({ userId, handleLogin, handleLogout }) => {
       </div>
       <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID} className="NavBar-login">
         {userId ? (
-          // <button
-          //   onClick={() => {
-          //     googleLogout();
-          //     handleLogout();
-          //   }}
-          // >
-
-          //   Logout
-          // </button>
-          // <button className="u-relative">
-          //   {props.userId ? (
           <Link to="/wishlist/" className="NavBar-link u-bold">
             WishList{" "}
           </Link>
         ) : (
-          /*{ ) : (
-            <Link to="/cuisine/" className="Home-button-text u-bold">
-              Cuisine
-            </Link>
-          )}
-          </button>} */
           <GoogleLogin onSuccess={handleLogin} onError={(err) => console.log(err)} />
         )}
       </GoogleOAuthProvider>

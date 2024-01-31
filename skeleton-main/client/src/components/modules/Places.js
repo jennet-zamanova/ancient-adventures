@@ -33,33 +33,19 @@ const Places = (props) => {
   };
 
   const getPlaceInformation = (placeNumber) => {
-    // get Image and Description from db
-    // console.log("placenum", placeNum);
-    // console.log("placeIdx", props.selectedPlaces[placeNumber]);
     get("/api/place/", { placeIdx: props.selectedPlaces[placeNumber] }).then((placeInfo) => {
       if (placeInfo[0] != undefined) {
-        // console.log("first info", placeInfo[0]);
         setPlaceImg("data:image/png;base64," + placeInfo[0].img);
         setPlaceDescription(placeInfo[0].description);
       }
-      console.log("this is number", placeNumber);
-      // console.log("this is places infor", placeInfo);
     });
   };
 
-  useEffect(() => {
-    console.log("all places", props.selectedPlaces);
-  });
   useEffect(() => {
     if (props.selectedPlaces != []) {
       getPlaceInformation(placeNum);
     }
   }, [props.selectedPlaces, placeNum]);
-
-  useEffect(() => {
-    console.log("placeImg changed. Component re-rendered.");
-    // }
-  }, [placeImg]);
 
   return (
     <div id="place-div-container">

@@ -54,14 +54,8 @@ router.get("/countries", (req, res) => {
 });
 
 router.get("/places", (req, res) => {
-  console.log("country:", req.query.country);
-  Country.find().then((places) => {
-    console.log("all places", places);
-  });
   Country.find({ country: req.query.country }).then((placesObj) => {
-    console.log("placesObj", placesObj);
     if (placesObj.length != 0) {
-      console.log(placesObj);
       res.send(placesObj[0].places);
     } else {
       res.send([]);
@@ -72,17 +66,14 @@ router.get("/places", (req, res) => {
 router.get("/place", (req, res) => {
   Place.find({ placeIdx: req.query.placeIdx }).then((placeObj) => {
     res.send(placeObj);
-    // console.log(placeObj);
   });
 });
 
 router.get("/place/user", (req, res) => {
   User.findById(req.query.userId).then((user) => {
-    console.log("userId", req.query.userId);
     let sendm = false;
     if (user.likedLocations.some((obj) => obj.country === req.query.country)) {
       const location = user.likedLocations.find((obj) => obj.country === req.query.country);
-      console.log("location", location);
       sendm = location.likedPlaces.includes(req.query.placeIdx);
     }
     res.send(sendm);
@@ -90,7 +81,6 @@ router.get("/place/user", (req, res) => {
 });
 
 const updateUser = async (req, res) => {
-  // const [likedPlaces, likedCountries, id] = req;
   const [likedLocations, id] = req;
 
   try {
@@ -99,7 +89,6 @@ const updateUser = async (req, res) => {
       {
         $set: {
           likedLocations: likedLocations,
-          // likedCountries: likedCountries,
         },
       }
     );
@@ -142,14 +131,11 @@ router.post("/place/user", (req, res) => {
       location["likedPlaces"] = [req.body.placeIdx];
       likedLocations.push(location);
     }
-
-    console.log("locations", likedLocations);
     updateUser([likedLocations, req.body.userId], res); //update mongodb
   });
 });
 
 router.get("/wishlist", (req, res) => {
-  console.log(req.query);
   if (req.query.userId !== undefined && req.query.userId !== "undefined") {
     User.findById(req.query.userId).then((user) => {
       res.send(user.likedLocations);
@@ -160,14 +146,9 @@ router.get("/wishlist", (req, res) => {
 });
 
 router.get("/travel", (req, res) => {
-  console.log(req.query.selectedPlaces.split(","));
-  console.log(typeof req.query.selectedPlaces.split(","));
   Place.find({ placeIdx: { $in: req.query.selectedPlaces.split(",") } }).then((result) => {
     let results = result.map((obj) => obj.travelTips);
-    console.log(results);
     results = results.join(" ");
-    console.log(results);
-    console.log(typeof results);
     res.send({ result: results });
   });
 });

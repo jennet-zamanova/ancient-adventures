@@ -31,15 +31,13 @@ const WishList = (props) => {
 
     selectedPlacesRef.current = selPlaces;
     setCountriesToRender((prev) => [...prev]); // Trigger a re-render
-    console.log("after", selectedPlacesRef.current);
   };
 
   const handleClickTravel = (country) => {
-    console.log(selectedPlacesRef.current);
     get("/api/travel/", { selectedPlaces: selectedPlacesRef.current[country] }).then((tipsObj) => {
       setTravelTips(tipsObj.result);
     });
-    console.log("Loading");
+    console.log("Loading...");
     delete selectedPlacesRef.current[country];
   };
 
@@ -51,16 +49,13 @@ const WishList = (props) => {
 
   useEffect(() => {
     get("/api/wishlist/", { userId: props.userId }).then((locations) => {
-      console.log("locations", locations);
       setCountries(locations.map((obj) => obj.country));
       setPlaces(locations);
     });
   }, [props.userId]);
 
   useEffect(() => {
-    console.log("selected places", selectedPlacesRef.current);
     if (likedCountries) {
-      console.log("the data is ready");
       // Update to return JSX elements inside map
       const mappedElements = likedCountries.map((country) => (
         <div key={country} className="WishList-countryText">
@@ -76,7 +71,6 @@ const WishList = (props) => {
             </button>
           </div>
           <>
-            {console.log(selectedPlacesRef.current)}
             <WishListPlace
               handleClick={handleClickImage}
               places={likedPlaces.find((obj) => obj.country === country).likedPlaces}

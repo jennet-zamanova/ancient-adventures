@@ -28,21 +28,18 @@ const Like = (props) => {
   }, []);
   useEffect(() => {
     if (isLiked !== undefined && isClicked && props.userId !== undefined) {
-      console.log(props.userId);
       post("/api/place/user", {
         userId: props.userId,
         isLiked: isLiked,
         country: props.country,
         placeIdx: props.placeIdx,
       }).then(() => {
-        console.log("like changed to ", isLiked);
         setClicked(false);
       });
     }
   }, [isClicked]);
 
   const handleClick = () => {
-    console.log(props.userId);
     setLiked(!isLiked);
     setClicked(true);
   };
@@ -69,7 +66,6 @@ const Like = (props) => {
         <button onClick={handleClickSignIn} className="Like-heartButton">
           {" "}
           <img src={greyHeart} className="Like-heart" />
-          {/* <Link to="/signin/"></Link> */}
         </button>
       )}
     </>

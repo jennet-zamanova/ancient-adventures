@@ -26,8 +26,6 @@ const WishListPlace = (props) => {
   const fetchPlaceInformation = async (place) => {
     try {
       const placeInfo = await getPlaceInformation(place);
-
-      console.log(`${(props.selectedPlacesW, props.country)}`);
       const imgClassName =
         "WishList-placeImg " +
         (props.selectedPlacesW !== undefined && props.selectedPlacesW.includes(place)
@@ -57,13 +55,11 @@ const WishListPlace = (props) => {
   useEffect(() => {
     setDataReady(false);
     renderPlaces();
-    console.log("rendred places");
   }, [props.selectedPlacesW]);
 
   useEffect(() => {
     if (placesToRender !== null) {
       setDataReady(true);
-      console.log("places to render if data ready", placesToRender);
     }
   }, [placesToRender]);
 
@@ -72,7 +68,7 @@ const WishListPlace = (props) => {
       {dataReady ? (
         <></>
       ) : (
-        <div style={{ fontWeight: "normal", fontSize: "16px", color: "black" }}>Loading</div>
+        <div style={{ fontWeight: "normal", fontSize: "16px", color: "black" }}>Loading...</div>
       )}
       {placesToRender}
     </>
